@@ -12,7 +12,7 @@ port : 3306,
 user:"root",
 
 // password for the connection
-password: "Spiderman.3",
+password: "",
 
 //database within mysql workbench 
 database: "bamazon"
@@ -33,16 +33,15 @@ function items(){
     connection.query(query, function(err, res) {
               if (err) throw err;
         for (var i = 0; i < res.length; i++){
-            console.log(res[i].item_id.toString() + " |-----PRODUCT-----|  " + res[i].product_name +  "\n |-----DEPARTMENT-----|  "+ res[i].department_name + "\n |-----PRICE-----|  " + res[i].price + "\n |-----AVIALABLE-----|  " + res[i].stock_quantity)
+            console.log( "ID number: " + res[i].item_id + "\n |-----PRODUCT-----|  " + res[i].product_name +  "\n |-----DEPARTMENT-----|  "+ res[i].department_name + "\n |-----PRICE-----|  " + res[i].price + "\n |-----AVIALABLE-----|  " + res[i].stock_quantity)
         }
         console.log('----------------------');
       });
     }
 
 
-function start(){
-     inquirer
-         .prompt([
+     start = () => {
+     inquirer .prompt([
              {
              name: "question",
              type: "list",
@@ -54,19 +53,68 @@ function start(){
              }
             ]).then(answer => {
                     if(answer.question === "Yes"){
-                  items();}
+                  items();
+                chosenItem();
+            }
                else{ console.log("Fine, Leave you peasent!!");  connection.end()};
-              
-            
-
-       
-       
-       
-       
-                //  const query =  "SELECT item_id, product_name FROM products";
-            //  conection.query(query, function(answer){
-            //      if (err) throw err;
-            //      console.log(result)
-            //  });
          });
         }
+         
+        chosenItem = () => {
+            connection.query("SELECT * FROM products", function(err, res){
+                if (err) throw err;
+
+            inquirer.prompt([
+                {
+                    name: "choice",
+                    type: "list",
+                    message: "Choose an item's ID [1-10]",
+                    choices: function(){
+                        var choiceArray =[];
+                        for (let i = 0; i < res.length; i++){
+                            choiceArray.push(res[i].item_id)
+                        }
+                        return choiceArray;
+                    }
+                }
+            ]).then(answer => {
+                for (var i = 0; i < res.length; i++){
+                    if (res[i].item_id === answer.choice){
+                       console.log("Your id of choice is: " + res[i].item_id + '\n Your product: ' + res[i].product_name + '\n Price is $' + res[i].price)
+                    }
+                }
+                howMany()
+            })
+        })
+    }
+
+    howMany = () => {
+        connection.query("SELECT stock_quantity FROM products", (err, res) => {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+        name: "quantity",
+        type: "input",
+        message: "How many would you like to purchase?",
+        validate: function(value) {
+            var stockQuantity = [];
+            for (var i = 0; i < res.length; i++){
+                stockQuantity.push(res[i].stock_quantity.toString());
+            }
+            if (isNaN(value) === false){
+                return true;
+            }
+            return(false + console.log("Please choose a number!!!"));
+            
+        }
+    }
+            ]).then(answer => {
+                for (var i = 0; i < res.length; i++){
+                    if (res[i].stock_quantity <= answer.quantity){
+                        console.log("OK hold on.")
+                    }else{ console.log("Insufficient Quantity!")}
+                }
+            })
+        })
+   
+    }
