@@ -15,7 +15,13 @@ asking what ID of the product they would like to buy
 
 here it shows the product they have selected and ask how many do they want. It also shows it has to be a number.
 
-![image](https://user-images.githubusercontent.com/48228824/59097295-2fabef80-88eb-11e9-8017-abd4cef29ee3.png)
- 
- 
+![image](https://user-images.githubusercontent.com/48228824/59144346-9a6d3180-89a4-11e9-9c1b-877717ad87d7.png)
 
+ here on this image it display how many they purchased and what the price will be for the quantity.
+
+![image](https://user-images.githubusercontent.com/48228824/59144366-fb950500-89a4-11e9-915f-3007653aaebd.png)
+
+overall image
+
+![image](https://user-images.githubusercontent.com/48228824/59144430-ec628700-89a5-11e9-836e-35bcc60154ac.png)
+![image](https://user-images.githubusercontent.com/48228824/59144423-cc32c800-89a5-11e9-8b36-e873e4d940d5.png)

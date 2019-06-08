@@ -12,7 +12,7 @@ port : 3306,
 user:"root",
 
 // password for the connection
-password: "",
+password: "Spiderman.3",
 
 //database within mysql workbench 
 database: "bamazon"
@@ -60,6 +60,9 @@ function items(){
          });
         }
          
+        var quantityOfProduct = [];
+        var onePrice = [];
+
         chosenItem = () => {
             connection.query("SELECT * FROM products", function(err, res){
                 if (err) throw err;
@@ -80,41 +83,50 @@ function items(){
             ]).then(answer => {
                 for (var i = 0; i < res.length; i++){
                     if (res[i].item_id === answer.choice){
-                       console.log("Your id of choice is: " + res[i].item_id + '\n Your product: ' + res[i].product_name + '\n Price is $' + res[i].price)
+                       console.log("Your id of choice is: " + res[i].item_id + '\n Your product: ' + res[i].product_name + '\n Price is $' + res[i].price + "\n  We have " +res[i].stock_quantity +" in stock.");
+
+                       quantityOfProduct.push(res[i].stock_quantity);
+
+                       onePrice.push(res[i].price);
                     }
                 }
+                console.log('------------------------------------------------------------------------')
                 howMany()
             })
-        })
+            
+        });
     }
 
+
     howMany = () => {
-        connection.query("SELECT stock_quantity FROM products", (err, res) => {
-            if (err) throw err;
             inquirer.prompt([
                 {
         name: "quantity",
         type: "input",
         message: "How many would you like to purchase?",
         validate: function(value) {
-            var stockQuantity = [];
-            for (var i = 0; i < res.length; i++){
-                stockQuantity.push(res[i].stock_quantity.toString());
-            }
+        
             if (isNaN(value) === false){
                 return true;
             }
-            return(false + console.log("Please choose a number!!!"));
+            return(false + console.log("   Please choose a number!!!"));
             
         }
     }
-            ]).then(answer => {
-                for (var i = 0; i < res.length; i++){
-                    if (res[i].stock_quantity <= answer.quantity){
-                        console.log("OK hold on.")
-                    }else{ console.log("Insufficient Quantity!")}
+            ]).then( answer => {
+            
+                const total = onePrice * answer.quantity;
+                if (quantityOfProduct > answer.quantity || quantityOfProduct == answer.quantity){
+                    console.log(answer.quantity)
+                    console.log("Ok! Your total price will be " + "$" + total)
+                    connection.end();
+                } else {
+                    console.log("Insufficient Quantity!")
+                    console.log('------------------------------------------------------------------------')
+                    howMany()
                 }
-            })
-        })
+         
+             })
+        
    
     }
