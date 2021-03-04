@@ -20,12 +20,13 @@
   "dependencies": {
     "fast-csv": "^4.3.6",
     "inquirer": "^6.5.2",
-    "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
+<<<<<<< HEAD
     "lodash": "^4.17.21",
     "mysql": "^2.18.1",
+=======
+>>>>>>> bf73ba41da9ade7259b0ff5d4bfd3bda51f0afac
     "mysql2": "^2.2.5",
-    "table": "^5.4.6",
-    "xmlhttprequest": "^1.8.0"
+    "table": "^5.4.6"
   }
 }

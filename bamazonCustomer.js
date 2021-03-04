@@ -148,80 +148,9 @@ csv
         console.log(output)
         });
       };
+
     });
   });
-
-// Start function when app launches.
-
-// const start = (data) => {
-//   inquirer
-//     .prompt([
-//       {
-//         type: "list",
-//         message: "Welcome lets looks at the products we have available?",
-//         choices: [
-//           new inquirer.Separator(),
-//           "Yes",
-//           "No",
-//         ],
-//         name: "answer",
-//       }
-//     ])
-//     .then((answers) => {
-
-//         if (answers.answer === "Yes") {
-
-//            products1();
-//         //   chosenItem();
-//         } else {
-//           console.log("\n\nMaybe next time we will have the product you are looking for.");
-//           connection.end();
-//         }
-//     })
-//     .catch(error => {
-//         if(error.isTtyError) {
-//             console.log("\n\nPrompt couldn't be rendered in the current environment")
-
-//           } else {
-//             // Something else went wrong
-//           }
-//     })
-// };
-
-// const products1 = () => {
-//     console.log("Here is the list of products available.");
-
-//     // let data,
-//     //     output
-
-//     //     data = [];
-//     //     output = table(data);
-
-//     var query = "SELECT * FROM products";
-
-//     connection.query(query, function(err, res,fields) {
-//       if (err) throw err;
-//       console.log(res);
-//     });
-//   }
-//   if (err) throw err;
-//   for (var i = 0; i < res.length; i++) {
-//     console.log(
-//       "ID number: " +
-//         res[i].item_id +
-//         "\n |-----PRODUCT-----|  " +
-//         res[i].product_name +
-//         "\n |-----DEPARTMENT-----|  " +
-//         res[i].department_name +
-//         "\n |-----PRICE-----|  " +
-//         res[i].price +
-//         "\n |-----AVIALABLE-----|  " +
-//         res[i].stock_quantity
-//     );
-//   }
-//   console.log("----------------------");
-// });
-// };
 
 // var quantityOfProduct = [];
 // var onePrice = [];
