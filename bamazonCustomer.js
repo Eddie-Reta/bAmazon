@@ -4,6 +4,8 @@ const inquirer = require("inquirer");
 const { table } = require("table");
 const fs = require("fs");
 const csv = require("@fast-csv/parse");
+var _ = require("lodash");
+const { data } = require("jquery");
 
 // Retrieve data from .csv file
 
@@ -27,12 +29,11 @@ csv
       user: "root",
 
       // insert password for the connection
-      password: "",
+      password: "iamthe1",
     });
 
-  // Connection to mysql 
+    // Connection to mysql
     connection.connect(function (err) {
-
       if (err) {
         return console.error("error connecting: " + err.stack);
       }
@@ -47,7 +48,7 @@ csv
           console.log("Database connected.");
           const db = "USE bamazon";
           connection.query(db);
-          
+
           //Query for data input into table
 
           const sql =
@@ -62,20 +63,19 @@ csv
                 "REPLACE INTO products (id,name,description,price,link) VALUES ?";
 
               const dataCSV = [];
-   
-              //Parse data 
+
+              //Parse data
               for (var i = 0; i < csvData.length; i++) {
-                var x = JSON.parse(csvData[i])
+                var x = JSON.parse(csvData[i]);
                 dataCSV.push(x);
               }
-              
+
               //pushing data into table
 
-                connection.query(query1,[dataCSV], (error) => {
-                  if (error) throw error;
-                  start(dataCSV);
-                });
-
+              connection.query(query1, [dataCSV], (error) => {
+                if (error) throw error;
+                start(dataCSV);
+              });
             }
           });
         }
@@ -88,81 +88,66 @@ csv
           .prompt([
             {
               type: "list",
-              message: "Welcome lets looks at the products we have available?",
-              choices: [
-                new inquirer.Separator(),
-                "Yes",
-                "No",
-              ],
+              message:
+                "\nWelcome lets looks at the products we have available?",
+              choices: [new inquirer.Separator(), "Yes", "No"],
               name: "answer",
-            }
+            },
           ])
           .then((answers) => {
-      
-              if (answers.answer === "Yes") {
-      
-                 products1();
+            if (answers.answer === "Yes") {
+              products();
               //   chosenItem();
-              } else {
-                console.log("\n\nMaybe next time we will have the product you are looking for.");
-                connection.end();
-              }
+            } else {
+              console.log(
+                "\n\nMaybe next time we will have the product you are looking for."
+              );
+              connection.end();
+            }
           })
-          .catch(error => {
-              if(error.isTtyError) {
-                  console.log("\n\nPrompt couldn't be rendered in the current environment")
-      
-                } else {
-                  // Something else went wrong
-                }
-          })
+          .catch((error) => {
+            if (error.isTtyError) {
+              console.log(
+                "\n\nPrompt couldn't be rendered in the current environment"
+              );
+            } else {
+              // Something else went wrong
+            }
+          });
       };
 
       //provide product table
-      
-      const products1 = () => {
-          console.log("Here is the list of products available.");
-          
-          var query = "SELECT * FROM products";
-      
-          connection.query(query, function(err, res) {
-            if (err) throw err;
-        
-        const tableData = []
-            
-        for (var i = 0; i < res.length; i++) {
-          const entries = Object.entries(res[i]);
-          for (var i = 0; i < entries.length; i++) {
-            console.log(entries[i].slice(","))
-          }
-            };
-             let data,
-              output
-            console.log(tableData)
-              data = tableData;
+
+      const products = () => {
+        console.log("Here is the list of products available.");
+
+        var query = "SELECT * FROM products";
+
+        connection.query(query, function (err, res) {
+          if (err) throw err;
+
+          const tableData = [];
+
+          //
+
+          for (var i = 0; i < res.length; i++) {
+         
+            for (const [key, value] of Object.entries(res[i])) {
               
-           //  console.log(output = table(data));
-            // const entries = Object.entries(res);
+              tableData.push([`${key}: ${value}`]);
+             }
+             tableData.push(["----------------------------------------------------------------------------------------------------------------------"]);          
+            }
+                
+        let data,
+        output
 
-            // for (var i = 0; i < entries.length; i++) {
-            //   console.log(entries[i]);
-            // }
-            //  let data,
-            //   output
-      
-            //   data = entries;
-              
-            //   output = table(data);
-          });
-        }
+        data = tableData;
 
-
-
-
-
-
-
-
+        output = table(data);
+        console.log(output)
+        });
+      };
     });
   });
 
@@ -219,24 +204,24 @@ csv
 //       console.log(res);
 //     });
 //   }
-    //   if (err) throw err;
-    //   for (var i = 0; i < res.length; i++) {
-    //     console.log(
-    //       "ID number: " +
-    //         res[i].item_id +
-    //         "\n |-----PRODUCT-----|  " +
-    //         res[i].product_name +
-    //         "\n |-----DEPARTMENT-----|  " +
-    //         res[i].department_name +
-    //         "\n |-----PRICE-----|  " +
-    //         res[i].price +
-    //         "\n |-----AVIALABLE-----|  " +
-    //         res[i].stock_quantity
-    //     );
-    //   }
-    //   console.log("----------------------");
-    // });
-  // };
+//   if (err) throw err;
+//   for (var i = 0; i < res.length; i++) {
+//     console.log(
+//       "ID number: " +
+//         res[i].item_id +
+//         "\n |-----PRODUCT-----|  " +
+//         res[i].product_name +
+//         "\n |-----DEPARTMENT-----|  " +
+//         res[i].department_name +
+//         "\n |-----PRICE-----|  " +
+//         res[i].price +
+//         "\n |-----AVIALABLE-----|  " +
+//         res[i].stock_quantity
+//     );
+//   }
+//   console.log("----------------------");
+// });
+// };
 
 // var quantityOfProduct = [];
 // var onePrice = [];
